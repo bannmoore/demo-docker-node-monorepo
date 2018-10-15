@@ -1,0 +1,16 @@
+{
+  "name": "@bam/shared-module-1",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "format": "prettier-standard index.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "Brittany <moore.brittanyann@gmail.com>",
+  "license": "MIT",
+  "devDependencies": {
+    "prettier-standard": "^8.0.1"
+  }
+}

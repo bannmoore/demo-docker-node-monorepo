@@ -1,0 +1,46 @@
+version: "3"
+
+services:
+  proxy:
+    image: bam/monorepo-proxy:v1
+    build:
+      context: ./nginx
+    ports:
+      - 80:80
+    links:
+      - base-app-ui
+      - app-1-api
+      - app-2-api
+  
+  base-app-ui:
+    image: bam/monorepo-ui:v1
+    build:
+      context: ./app
+      dockerfile: Dockerfile.prod.ui
+      args:
+        APP_NAME: base-app-ui
+    ports:
+      - 80
+
+  app-1-api:
+    image: bam/monorepo-app-1:v1
+    build:
+      context: ./app
+      dockerfile: Dockerfile.prod.service
+      args:
+        APP_NAME: app-1-api
+    ports:
+      - 3000
+    
+  app-2-api:
+    image: bam/monorepo-app-2:v1
+    build:
+      context: ./app
+      dockerfile: Dockerfile.prod.service
+      args:
+        APP_NAME: app-2-api
+    environment:
+      BAM_ENV_VALUE: BAMTEST
+    ports:
+      - 3000
+  

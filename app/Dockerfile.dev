@@ -1,0 +1,16 @@
+# base container
+FROM bam/base:latest AS base
+
+# runtime container
+FROM node:slim
+
+ARG APP_NAME
+
+WORKDIR /opt/app/packages/${APP_NAME}
+
+COPY --from=base /opt/app/packages /opt/app/packages
+
+EXPOSE 3000
+
+ENTRYPOINT [ "npm", "run" ]
+CMD [ "start" ]

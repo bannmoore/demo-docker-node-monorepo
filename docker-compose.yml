@@ -1,0 +1,56 @@
+version: "3"
+
+services:
+  proxy:
+    image: bam/monorepo-proxy:latest
+    build:
+      context: ./nginx
+    ports:
+      - 80:80
+    links:
+      - base-app-ui
+      - app-1-api
+      - app-2-api
+  
+  base-app-ui:
+    image: bam/monorepo-ui:latest
+    build:
+      context: ./app
+      dockerfile: Dockerfile.dev
+      args:
+        APP_NAME: base-app-ui
+    ports:
+      - 80
+    volumes:
+      - "./app/packages/base-app-ui/src:/opt/app/packages/base-app-ui/src"
+      - "/opt/app/packages/base-app-ui/node_modules"
+
+  app-1-api:
+    image: bam/monorepo-app-1:latest
+    build:
+      context: ./app
+      dockerfile: Dockerfile.dev
+      args:
+        APP_NAME: app-1-api
+    ports:
+      - 3000
+    volumes:
+      - "./app/packages/app-1-api/app.js:/opt/app/packages/app-1-api/app.js"
+      - "/opt/app/packages/app-1-api/node_modules"
+    
+  app-2-api:
+    image: bam/monorepo-app-2:latest
+    build:
+      context: ./app
+      dockerfile: Dockerfile.dev
+      args:
+        APP_NAME: app-2-api
+    environment:
+      BAM_ENV_VALUE: BAMTEST
+    ports:
+      - 3000
+    volumes:
+      - "./app/packages/app-2-api/app.js:/opt/app/packages/app-2-api/app.js"
+      - "/opt/app/packages/app-2-api/node_modules"
+
+  

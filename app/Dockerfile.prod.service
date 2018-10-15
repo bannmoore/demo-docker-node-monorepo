@@ -1,0 +1,25 @@
+# base container
+FROM bam/base:latest AS base
+
+# build container
+FROM node:slim AS build
+
+ARG APP_NAME
+
+RUN npm install -g pkg
+
+WORKDIR /opt/app/packages/${APP_NAME}
+
+COPY --from=base /opt/app/packages /opt/app/packages
+
+RUN pkg -t node8-alpine-x64 --public app.js -o /opt/app/build
+
+# runtime container
+FROM alpine
+
+RUN apk add --no-cache libstdc++
+
+COPY --from=build /opt/app/build /opt/app
+
+EXPOSE 3000
+CMD ["/opt/app"]

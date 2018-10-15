@@ -1,0 +1,10 @@
+FROM node:slim AS base
+
+ARG APP_NAME
+
+WORKDIR /opt/app
+
+COPY ./packages /opt/app/packages
+COPY ./bin /opt/app/bin
+
+RUN ./bin/build.sh
